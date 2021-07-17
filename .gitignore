@@ -1,0 +1,10 @@
+Reports
+test-output
+target
+logs
+.idea
+*.iml
+*.html
+Screenshots
+Ofsseleniumjava.iml
+workspace.xml
