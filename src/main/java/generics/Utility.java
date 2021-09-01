@@ -14,16 +14,13 @@ import org.junit.Assert;
 import org.testng.Reporter;
 
 import java.io.*;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
 public class Utility {
-
     private Utility() {
-
     }
 
     //----------------------------------------------------------------------------------------------------------------//
@@ -39,14 +36,7 @@ public class Utility {
         String value = "";
         Properties ppt = new Properties();
         try {
-            //Added
-
-            ClassLoader loader = Utility.class.getClassLoader();
-            String propPath=loader.getResource(filePath).getPath();
-            //System.out.println("My file Path: "+propPath);
-            //System.out.println("Existing path: "+filePath);
-
-            ppt.load(loader.getResourceAsStream(filePath));
+            ppt.load(new FileInputStream(filePath));
             value = ppt.getProperty(key);
         } catch (Exception e) {
             Reporter.log(e.getLocalizedMessage(), true);
@@ -67,12 +57,7 @@ public class Utility {
         ObjectRepSheet data = new ObjectRepSheet();
         Map<String, ObjectRepSheet> repSheet = new HashMap<>();
         String rowData;
-
-        //Added
-        ClassLoader loader = Utility.class.getClassLoader();
-
-
-        try (InputStream fis = loader.getResourceAsStream(BaseTest.objectRepository);
+        try (FileInputStream fis = new FileInputStream(new File(BaseTest.objectRepository));
              Workbook wb = new HSSFWorkbook(fis)) {
             Sheet objSheet = wb.getSheet(sheet);
             if (objSheet == null) {
@@ -156,10 +141,7 @@ public class Utility {
         String cellData = "";
         int rowNum = 1;
 
-        ClassLoader loader = Utility.class.getClassLoader();
-        //FileInputStream fis = new FileInputStream(new File(BaseTest.testData)
-
-        try (InputStream fis = loader.getResourceAsStream(BaseTest.testData); Workbook wb = new HSSFWorkbook(fis)) {
+        try (FileInputStream fis = new FileInputStream(new File(BaseTest.testData)); Workbook wb = new HSSFWorkbook(fis)) {
             Sheet sheet1 = wb.getSheet(sheet);
 
             int columnCount = sheet1.getRow(0).getLastCellNum();
@@ -190,8 +172,7 @@ public class Utility {
         String cellData = "";
         int columnNum = 1;
 
-        ClassLoader loader = Utility.class.getClassLoader();
-        try (InputStream fis = loader.getResourceAsStream(AutomationConstants.PLATFORM_CONFIG); Workbook wb = new HSSFWorkbook(fis)) {
+        try (FileInputStream fis = new FileInputStream(new File(AutomationConstants.PLATFORM_CONFIG)); Workbook wb = new HSSFWorkbook(fis)) {
             Sheet sheet1 = wb.getSheet(sheet);
 
             int rowCount = sheet1.getLastRowNum();

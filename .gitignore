@@ -1,8 +1,6 @@
-Reports
-test-output
 target
 logs
-.idea
+.idea/
 *.iml
 *.html
 Screenshots

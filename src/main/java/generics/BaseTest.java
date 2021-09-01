@@ -53,20 +53,22 @@ public abstract class BaseTest  {
         if (targetDriver.equalsIgnoreCase("Chrome")) {
             ChromeDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless");
+            options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+            /*options.addArguments("--headless");
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
-            options.addArguments("--ignore-certificate-errors");
+            options.addArguments("--ignore-certificate-errors");*/
             driver = new ChromeDriver(options);
-        } else if (targetDriver.equalsIgnoreCase("FireFox")) {
-            ChromeDriverManager.firefoxdriver().setup();
-            driver = new FirefoxDriver();
-        } else if (targetDriver.equalsIgnoreCase("IE")) {
-            ChromeDriverManager.iedriver().setup();
-            driver = new InternetExplorerDriver();
-        }
-        driver.manage().deleteAllCookies();
-        driver.manage().window().maximize();
+
+            } else if (targetDriver.equalsIgnoreCase("FireFox")) {
+                ChromeDriverManager.firefoxdriver().setup();
+                driver = new FirefoxDriver();
+            } else if (targetDriver.equalsIgnoreCase("IE")) {
+                ChromeDriverManager.iedriver().setup();
+                driver = new InternetExplorerDriver();
+            }
+            driver.manage().deleteAllCookies();
+            driver.manage().window().maximize();
 
         return driver;
     }
@@ -105,7 +107,8 @@ public abstract class BaseTest  {
 
     @AfterTest(alwaysRun = true)
     public void tearDownBrowser() {
-        driver.close();
+                driver.close();
+                driver.quit();
     }
 
     @AfterSuite(alwaysRun = true)

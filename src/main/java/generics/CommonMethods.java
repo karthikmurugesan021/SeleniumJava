@@ -11,19 +11,9 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.Reporter;
-import ru.yandex.qatools.ashot.AShot;
-import ru.yandex.qatools.ashot.Screenshot;
-import ru.yandex.qatools.ashot.comparison.ImageDiff;
-import ru.yandex.qatools.ashot.comparison.ImageDiffer;
-import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
-import javax.imageio.ImageIO;
-import javax.xml.bind.DatatypeConverter;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -266,7 +256,7 @@ public class CommonMethods extends BaseTest {
      *
      * @return finalImgPath - Returns the Screenshot path location.
      */
-    private static String getScreenShot() {
+    public static String getScreenShot() {
         String encodedBase64 = null;
         File sourceFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         try (FileInputStream fileInputStreamReader = new FileInputStream (sourceFile)){
@@ -364,6 +354,7 @@ public class CommonMethods extends BaseTest {
             if (ele != null) {
                 ele.clear();
                 ele.sendKeys(data);
+
             }
             if (eleName.equalsIgnoreCase("Password")) {
                 data = "**********";
@@ -582,7 +573,7 @@ public class CommonMethods extends BaseTest {
     public void highLightElement(ObjectRepSheet object, String eleName) {
         try {
             WebElement ele = findElement(object);
-            jse.executeScript("arguments[0].setAttribute('style', 'background: yellow; border: 2px solid red;');", ele);
+            jse.executeScript("arguments[0].setAttribute('style', 'background: yellow; border: 2px solid yellow;');", ele);
             String screenshotPath = getScreenShot();
             reporter.log(LogStatus.PASS, eleName + " : is Highlighted" + reporter.addScreenCapture(screenshotPath));
         } catch (Exception e) {
@@ -875,12 +866,11 @@ public class CommonMethods extends BaseTest {
     /**
      * This method is used to wait for the Web Element to disappear
      *
-     * @param object  is the element LocatorType and LocatorValue
-     * @param eleName Element name that is print in the Report.
+     *
      */
-    public void waitForElementToDisappear(ObjectRepSheet object, String eleName) {
+    /* public void waitForElementToDisappear(ObjectRepSheet object, String eleName) {
         try {
-            new WebDriverWait(driver, ETO).until(ExpectedConditions.invisibilityOfAllElements(findElements(object)));
+            new WebDriverWait(driver, ETO).until(ExpectedConditions.invisibilityOfAllElements(findElement(object)));
             reporter.log(LogStatus.PASS, eleName + " Is disappeared");
         } catch (Exception e) {
             reporter.log(LogStatus.FAIL, eleName + " is not Disappeared and the Error is : " + getErrorMessage(e));
@@ -959,56 +949,4 @@ public class CommonMethods extends BaseTest {
         }
     }
     //------------------------------------------------46--------------------------------------------------------------//
-    /**
-     *
-     *
-     * @param fileName
-     * @return
-     * @throws IOException
-     * @throws InterruptedException
-     */
-    public Screenshot fullPageScreenCapture(String fileName) throws IOException, InterruptedException {
-        // Here 100 is a scrollTimeOut in milliseconds, For every 100 ms the
-        // screen will be scrolled and captured
-        Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportRetina(100, 0, 0, 2))
-                .takeScreenshot(driver);
-        // To save the screenshot in desired location
-        ImageIO.write(screenshot.getImage(), "PNG",
-                new File("Reports/"+fileName));
-        return screenshot;
-    }
-    //------------------------------------------------47--------------------------------------------------------------//
-
-    /**
-     *
-     *
-     * @param myScreenshot
-     * @param anotherScreenshot
-     * @return
-     * @throws IOException
-     * @throws InterruptedException
-     */
-    public BufferedImage imageCompare(Screenshot myScreenshot, Screenshot anotherScreenshot) throws IOException, InterruptedException {
-        ImageDiff diff = new ImageDiffer().makeDiff( myScreenshot, anotherScreenshot );
-        BufferedImage diffImage = diff.getMarkedImage();
-        getScreenShot1(  diffImage );
-        return diffImage;
-    }
-    //------------------------------------------------48--------------------------------------------------------------//
-
-    /**
-     *This method is used to get the screen shot of the screen and attach them to reports
-     *
-     * @param imageValue is the image or screen shot that should get attached in the report
-     * @throws IOException
-     */
-    private static void getScreenShot1(BufferedImage imageValue) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(imageValue, "png", baos);
-        String data = DatatypeConverter.printBase64Binary(baos.toByteArray());
-        String screenshotPath =  "data:image/png;base64," + data;
-        reporter.log(LogStatus.PASS, reporter.addBase64ScreenShot(screenshotPath));
-    }
-    //------------------------------------------------49--------------------------------------------------------------//
-
 }
