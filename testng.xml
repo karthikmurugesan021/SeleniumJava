@@ -16,8 +16,10 @@
             </run>
         </groups>
         <classes>
-            <class name="test.java.com.ofs.testcases.DemoSmokeTestCase"/>
-            <!--<class name="test.java.com.ofs.testcases.DemoSanityTest"/>-->
+            <!--<class name="test.java.com.ofs.testcases.DemoSmokeTestCase"/>
+            <class name="test.java.com.ofs.testcases.DemoSanityTest"/>-->
+            <!--<class name="test.java.com.ofs.testcases.DemoQAHomePage"/>-->
+            <class name="test.java.com.ofs.testcases.ElementsCases"/>
         </classes>
     </test>
 </suite>

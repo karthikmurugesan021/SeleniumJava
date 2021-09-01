@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DemoSanityTest extends BaseTest {
 
-    @Test(groups = {"Sanity"})
+
     public void testSanity() {
 
        // String homePageTitle = Utility.getCellData_TestData ("Sanity Test", "HomePage Title");
